@@ -1,6 +1,37 @@
 import React, { useState } from 'react';
 import { Container, Form, Button, Table } from 'react-bootstrap';
-import { fetchSheetData } from './GoogleSheets';
+
+const API_KEY = `AIzaSyCMsslWIYUnU0DXdJF0T-tsc4XCwMVSFsc`;
+const SPREADSHEET_ID = `1UebVF2471PlstzOTyW8Bq77sCZ8zJzCqnqisYJcFQ6Y`;
+const SHEET_RANGE = `Salary!A2:F`;
+
+const fetchSheetData = async (spreadsheetId, range, apiKey) => {
+  let fetchedData = [];
+
+  return fetch(
+    `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      fetchedData = data.values.map(row => {
+        const record = {
+          employer: row[0],
+          jobTitle: row[1],
+          baseSalary: row[2],
+          location: row[3],
+          submitDate: row[4],
+          startDate: row[5],
+          year: new Date(row[5]).getFullYear()
+        };
+        return record
+      });
+      
+      return  fetchedData
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
 
 function App() {
   const [employer, setEmployer] = useState('');
@@ -11,13 +42,8 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      const spreadsheetId = process.env.SPREADSHEET_ID;
-      const range = process.env.SHEET_RANGE;
-
-      const fetchedData = await fetchSheetData(spreadsheetId, range);
-
+      const fetchedData = await fetchSheetData(SPREADSHEET_ID, SHEET_RANGE, API_KEY);
       setSalaryRecords(fetchedData);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -31,7 +57,11 @@ function App() {
   }
 
   return (
-    <Container className="container mt-5 d-flex flex-column justify-content-center align-items-center" style={{ minHeight: '30vh' }}>
+    <Container
+      className="container mt-5 d-flex flex-column justify-content-center align-items-center"
+      style={{ minHeight: '30vh' }}
+    >
+      <h2 className="justify-content-center align-items-center" style={{ minHeight: '10vh' }}>H1B Salary Database</h2>
       <Form onSubmit={handleSubmit}>
         <div className="row">
           <div className="col">
@@ -66,7 +96,11 @@ function App() {
           </div>
           <div className="col">
             <Form.Group>
-              <Form.Control as="select" value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)}>
+              <Form.Control
+                as="select"
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(e.target.value)}
+              >
                 <option>All Years</option>
                 {years.map((year) => (
                   <option key={year} value={year}>
@@ -83,24 +117,38 @@ function App() {
           </div>
         </div>
       </Form>
-      <Table striped bordered hover className="mt-4" style={{ maxWidth: '800px' }}>
-        <thead>
-          <tr>
-            <th>Employer</th>
-            <th>Job Title</th>
-            <th>Base Salary</th>
-            <th>Location</th>
-            <th>Submit Date</th>
-            <th>Start Date</th>
-          </tr>
-        </thead>
+      <Table
+        striped
+        bordered
+        hover
+        className="mt-4"
+        style={{ maxWidth: '800px' }}
+      >
+        {
+           salaryRecords && salaryRecords.length!==0?(<thead>
+            <tr>
+              <th>Employer</th>
+              <th>Job Title</th>
+              <th>Base Salary</th>
+              <th>Location</th>
+              <th>Submit Date</th>
+              <th>Start Date</th>
+            </tr>
+          </thead>):"" 
+        }
+        
         <tbody>
           {salaryRecords.map((record, index) => {
             if (
-              (record.employer.toLowerCase().includes(employer.toLowerCase()) || employer === '') &&
-              (record.jobTitle.toLowerCase().includes(jobTitle.toLowerCase()) || jobTitle === '') &&
-              (record.location.toLowerCase().includes(city.toLowerCase()) || city === '') &&
-              (selectedYear === 'All Years' || new Date(record.submitDate).getFullYear().toString() === selectedYear)
+              (record.employer.toLowerCase().includes(employer.toLowerCase()) ||
+                employer === '') &&
+              (record.jobTitle.toLowerCase().includes(jobTitle.toLowerCase()) ||
+                jobTitle === '') &&
+              (record.location.toLowerCase().includes(city.toLowerCase()) ||
+                city === '') &&
+              (selectedYear === 'All Years' ||
+                new Date(record.submitDate).getFullYear().toString() ===
+                  selectedYear)
             ) {
               return (
                 <tr key={index}>
