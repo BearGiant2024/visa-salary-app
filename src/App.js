@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { Container, Form, Button, Table, Alert } from 'react-bootstrap';
 
-//const API_KEY = `AIzaSyCPiVRDxxQFWZjanUQx2oPrnEg3cqMjz3k`;
-//const SPREADSHEET_ID = `12hKO-ucUdcb7ZPiGdkAW3WxX7proDzH8CCJIr4OlaY0`;
-const API_KEY = `AIzaSyCMsslWIYUnU0DXdJF0T-tsc4XCwMVSFsc`;
-const SPREADSHEET_ID = `1UebVF2471PlstzOTyW8Bq77sCZ8zJzCqnqisYJcFQ6Y`;
+const API_KEY = `AIzaSyCPiVRDxxQFWZjanUQx2oPrnEg3cqMjz3k`;
+const SPREADSHEET_ID = `12hKO-ucUdcb7ZPiGdkAW3WxX7proDzH8CCJIr4OlaY0`;
+
 const SHEET_RANGE = "'Form Responses 1'!A2:H";
 
 const fetchSheetData = async (spreadsheetId, range, apiKey) => {
