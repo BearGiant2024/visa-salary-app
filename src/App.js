@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { Container, Form, Button, Table } from 'react-bootstrap';
+import { Container, Form, Button, Table, Alert } from 'react-bootstrap';
 
+//const API_KEY = `AIzaSyCPiVRDxxQFWZjanUQx2oPrnEg3cqMjz3k`;
+//const SPREADSHEET_ID = `12hKO-ucUdcb7ZPiGdkAW3WxX7proDzH8CCJIr4OlaY0`;
 const API_KEY = `AIzaSyCMsslWIYUnU0DXdJF0T-tsc4XCwMVSFsc`;
 const SPREADSHEET_ID = `1UebVF2471PlstzOTyW8Bq77sCZ8zJzCqnqisYJcFQ6Y`;
-const SHEET_RANGE = `Salary!A2:F`;
+const SHEET_RANGE = "'Form Responses 1'!A2:H";
 
 const fetchSheetData = async (spreadsheetId, range, apiKey) => {
   let fetchedData = [];
@@ -13,20 +15,18 @@ const fetchSheetData = async (spreadsheetId, range, apiKey) => {
   )
     .then((response) => response.json())
     .then((data) => {
-      fetchedData = data.values.map(row => {
+      fetchedData = data.values.map((row) => {
         const record = {
-          employer: row[0],
-          jobTitle: row[1],
-          baseSalary: row[2],
-          location: row[3],
-          submitDate: row[4],
-          startDate: row[5],
-          year: new Date(row[5]).getFullYear()
+          recruiterInitials: row[0],
+          company: row[1],
+          year: row[2],
+          stage: row[3],
+          followUp: row[4],
         };
-        return record
+        return record;
       });
-      
-      return  fetchedData
+
+      return fetchedData;
     })
     .catch((error) => {
       console.error(error);
@@ -34,22 +34,57 @@ const fetchSheetData = async (spreadsheetId, range, apiKey) => {
 };
 
 function App() {
-  const [employer, setEmployer] = useState('');
-  const [jobTitle, setJobTitle] = useState('');
-  const [city, setCity] = useState('');
-  const [selectedYear, setSelectedYear] = useState('All Years');
-  const [salaryRecords, setSalaryRecords] = useState([]);
+  const [recruiterInitials, setRecruiterInitials] = useState('');
+  const [company, setCompany] = useState('');
+  const [year, setYear] = useState('All Years');
+  const [ghostingRecords, setGhostingRecords] = useState([]);
+  const [error, setError] = useState('');
+  const [showResults, setShowResults] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    if (!recruiterInitials && !company) {
+      setError("Please provide Recruiter's Initials and Company name");
+      return;
+    }
+  
+    if (!recruiterInitials) {
+      setError("Please enter Recruiter's Initials.");
+      return;
+    }
+  
+    if (!company) {
+      setError('Please enter Company Name.');
+      return;
+    }
+  
+    setError('');
+  
     try {
       const fetchedData = await fetchSheetData(SPREADSHEET_ID, SHEET_RANGE, API_KEY);
-      setSalaryRecords(fetchedData);
+      
+      const filteredData = fetchedData.filter((record) =>{
+
+        const isRecruiterIntitals = record.recruiterInitials.toLowerCase().includes(recruiterInitials.toLowerCase()) 
+      
+        const isCompany = record.company.toLowerCase().includes(company.toLowerCase())
+
+        const isYear = (year === 'All Years' || parseInt(record.year) === parseInt(year))
+
+        return isRecruiterIntitals && isCompany && isYear
+        
+      }
+        
+      );
+  
+      setGhostingRecords(filteredData);
+      setShowResults(true); 
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
-
+  
   const years = [];
 
   for (let year = 2023; year >= 2012; year--) {
@@ -61,16 +96,22 @@ function App() {
       className="container mt-5 d-flex flex-column justify-content-center align-items-center"
       style={{ minHeight: '30vh' }}
     >
-      <h2 className="justify-content-center align-items-center" style={{ minHeight: '10vh' }}>H1B Salary Database</h2>
-      <Form onSubmit={handleSubmit}>
+      <h1 className="justify-content-center align-items-center" style={{ minHeight: '10vh' }}><b>Ghosting's Database</b></h1>
+      {error && (
+        <Alert variant="danger" className="mb-4">
+          {error}
+        </Alert>
+      )}
+      <Form>
         <div className="row">
           <div className="col">
             <Form.Group>
               <Form.Control
                 type="text"
-                value={employer}
-                onChange={(e) => setEmployer(e.target.value)}
-                placeholder="Employer"
+                value={recruiterInitials}
+                onChange={(e) => setRecruiterInitials(e.target.value)}
+                placeholder="Recruiter's Initials"
+                required
               />
             </Form.Group>
           </div>
@@ -78,19 +119,10 @@ function App() {
             <Form.Group>
               <Form.Control
                 type="text"
-                value={jobTitle}
-                onChange={(e) => setJobTitle(e.target.value)}
-                placeholder="and/or Job Title"
-              />
-            </Form.Group>
-          </div>
-          <div className="col">
-            <Form.Group>
-              <Form.Control
-                type="text"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                placeholder="City"
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
+                placeholder="Company"
+                required
               />
             </Form.Group>
           </div>
@@ -98,8 +130,8 @@ function App() {
             <Form.Group>
               <Form.Control
                 as="select"
-                value={selectedYear}
-                onChange={(e) => setSelectedYear(e.target.value)}
+                value={year}
+                onChange={(e) => setYear(e.target.value)}
               >
                 <option>All Years</option>
                 {years.map((year) => (
@@ -111,61 +143,44 @@ function App() {
             </Form.Group>
           </div>
           <div className="col">
-            <Button variant="primary" type="submit">
+            <Button variant="primary" onClick={handleSubmit}>
               Search
             </Button>
           </div>
         </div>
       </Form>
-      <Table
-        striped
-        bordered
-        hover
-        className="mt-4"
-        style={{ maxWidth: '800px' }}
-      >
-        {
-           salaryRecords && salaryRecords.length!==0?(<thead>
-            <tr>
-              <th>Employer</th>
-              <th>Job Title</th>
-              <th>Base Salary</th>
-              <th>Location</th>
-              <th>Submit Date</th>
-              <th>Start Date</th>
+      <Table striped bordered hover className="mt-4" style={{ maxWidth: '800px' }}>
+  {showResults && ghostingRecords.length > 0 ? (
+    <thead>
+      <tr>
+        <th>Company</th>
+        <th>Recruiter's Initials</th>
+        <th>Stage</th>
+        <th>Follow Up</th>
+        <th>Year</th>
+      </tr>
+    </thead>
+  ) : null}
+  <tbody>
+    {showResults && ghostingRecords.length > 0 ? (
+      ghostingRecords.map((record, index) => {
+          return (
+            <tr key={index}>
+              <td>{record.company}</td>
+              <td>{record.recruiterInitials}</td>
+              <td>{record.stage}</td>
+              <td>{record.followUp}</td>
+              <td>{record.year}</td>
             </tr>
-          </thead>):"" 
-        }
-        
-        <tbody>
-          {salaryRecords.map((record, index) => {
-            if (
-              (record.employer.toLowerCase().includes(employer.toLowerCase()) ||
-                employer === '') &&
-              (record.jobTitle.toLowerCase().includes(jobTitle.toLowerCase()) ||
-                jobTitle === '') &&
-              (record.location.toLowerCase().includes(city.toLowerCase()) ||
-                city === '') &&
-              (selectedYear === 'All Years' ||
-                new Date(record.submitDate).getFullYear().toString() ===
-                  selectedYear)
-            ) {
-              return (
-                <tr key={index}>
-                  <td>{record.employer}</td>
-                  <td>{record.jobTitle}</td>
-                  <td>${record.baseSalary.toLocaleString()}</td>
-                  <td>{record.location}</td>
-                  <td>{record.submitDate}</td>
-                  <td>{record.startDate}</td>
-                </tr>
-              );
-            }
-
-            return null;
-          })}
-        </tbody>
-      </Table>
+          );
+      })
+    ) : (
+      <tr>
+        <td colSpan="5">No records found.</td>
+      </tr>
+    )}
+  </tbody>
+</Table>
     </Container>
   );
 }
