@@ -44,18 +44,11 @@ function App() {
     e.preventDefault();
 
     if (!recruiterInitials && !company) {
-      setError("Please provide Recruiter's Initials and Company name");
+      setError("Please provide Either Recruiter's Initials and Company name");
+      setShowResults(false)
       return;
-    }
-
-    if (!recruiterInitials) {
-      setError("Please enter Recruiter's Initials.");
-      return;
-    }
-
-    if (!company) {
-      setError('Please enter Company Name.');
-      return;
+    }else{
+      
     }
 
     setError('');
