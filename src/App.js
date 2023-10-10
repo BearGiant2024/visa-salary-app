@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Container, Form, Button, Table, Alert } from 'react-bootstrap';
+import React, { useState } from "react";
+import { Container, Form, Button, Table, Alert } from "react-bootstrap";
 
 const API_KEY = `AIzaSyCPiVRDxxQFWZjanUQx2oPrnEg3cqMjz3k`;
 const SPREADSHEET_ID = `12hKO-ucUdcb7ZPiGdkAW3WxX7proDzH8CCJIr4OlaY0`;
@@ -33,11 +33,11 @@ const fetchSheetData = async (spreadsheetId, range, apiKey) => {
 };
 
 function App() {
-  const [recruiterInitials, setRecruiterInitials] = useState('');
-  const [company, setCompany] = useState('');
-  const [year, setYear] = useState('All Years');
+  const [recruiterInitials, setRecruiterInitials] = useState("");
+  const [company, setCompany] = useState("");
+  const [year, setYear] = useState("All Years");
   const [ghostingRecords, setGhostingRecords] = useState([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [showResults, setShowResults] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -45,23 +45,31 @@ function App() {
 
     if (!recruiterInitials && !company) {
       setError("Please provide Either Recruiter's Initials and Company name");
-      setShowResults(false)
+      setShowResults(false);
       return;
-    }else{
-      
+    } else {
     }
 
-    setError('');
+    setError("");
 
     try {
-      const fetchedData = await fetchSheetData(SPREADSHEET_ID, SHEET_RANGE, API_KEY);
+      const fetchedData = await fetchSheetData(
+        SPREADSHEET_ID,
+        SHEET_RANGE,
+        API_KEY
+      );
 
       const filteredData = fetchedData.filter((record) => {
-        const isRecruiterIntitals = record.recruiterInitials.toLowerCase().includes(recruiterInitials.toLowerCase());
+        const isRecruiterIntitals = record.recruiterInitials
+          .toLowerCase()
+          .includes(recruiterInitials.toLowerCase());
 
-        const isCompany = record.company.toLowerCase().includes(company.toLowerCase());
+        const isCompany = record.company
+          .toLowerCase()
+          .includes(company.toLowerCase());
 
-        const isYear = year === 'All Years' || parseInt(record.year) === parseInt(year);
+        const isYear =
+          year === "All Years" || parseInt(record.year) === parseInt(year);
 
         return isRecruiterIntitals && isCompany && isYear;
       });
@@ -69,7 +77,7 @@ function App() {
       setGhostingRecords(filteredData);
       setShowResults(true);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching data:", error);
     }
   };
 
@@ -79,12 +87,40 @@ function App() {
     years.push(year);
   }
 
+  const openInNewTab = (url) => {
+    window.open(url, "_blank", "noreferrer");
+  };
+
   return (
     <div className="app-container">
       <Container className="mt-5 d-flex flex-column justify-content-center align-items-center">
-        <h1 className="text-center" style={{ minHeight: '10vh' }}>
+        <h1 className="text-center" style={{ minHeight: "10vh" }}>
           <b>Ghosting's Database</b>
         </h1>
+        <p className="text-center col-lg-8">
+          Ghostings.fyi is a collection of ghosting experiences by job
+          candidates that aims to bring more transparency to the recruitment
+          process. You may submit experiences to be reviewed by the team at the
+          link below and can browse previously reported experiences using the
+          search function below. We ask that this list be used solely for
+          research purposes while evaluting potential employers and not in any
+          malicious manner. Experiences matter and we hope that our efforts
+          imporve the overall recruitment process for both candidates and
+          companies in the future.
+        </p>
+        <div className="justify-content-center align-items-center">
+          <Button
+            style={{ marginBottom: "20px" }}
+            variant="primary"
+            onClick={() =>
+              openInNewTab(
+                "https://docs.google.com/forms/u/1/d/e/1FAIpQLSfnvMHVuxRXez5_ih43I9p-p8iXv9PZRXuXJZsYF6O76Td4sA/viewform?usp=sf_link"
+              )
+            }
+          >
+            Submit Form
+          </Button>
+        </div>
         {error && (
           <Alert variant="danger" className="mb-4">
             {error}
@@ -140,8 +176,11 @@ function App() {
             </div>
           </div>
         </Form>
-        <div className="table-responsive mt-4" style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <Table striped bordered hover >
+        <div
+          className="table-responsive mt-4"
+          style={{ maxWidth: "800px", margin: "0 auto" }}
+        >
+          <Table striped bordered hover>
             {showResults && ghostingRecords.length > 0 ? (
               <thead>
                 <tr>
