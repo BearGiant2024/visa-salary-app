@@ -97,30 +97,6 @@ function App() {
         <h1 className="text-center" style={{ minHeight: "10vh" }}>
           <b>Ghosting's Database</b>
         </h1>
-        <p className="text-center col-lg-8">
-          Ghostings.fyi is a collection of ghosting experiences by job
-          candidates that aims to bring more transparency to the recruitment
-          process. You may submit experiences to be reviewed by the team at the
-          link below and can browse previously reported experiences using the
-          search function below. We ask that this list be used solely for
-          research purposes while evaluting potential employers and not in any
-          malicious manner. Experiences matter and we hope that our efforts
-          imporve the overall recruitment process for both candidates and
-          companies in the future.
-        </p>
-        <div className="justify-content-center align-items-center">
-          <Button
-            style={{ marginBottom: "20px" }}
-            variant="primary"
-            onClick={() =>
-              openInNewTab(
-                "https://docs.google.com/forms/u/1/d/e/1FAIpQLSfnvMHVuxRXez5_ih43I9p-p8iXv9PZRXuXJZsYF6O76Td4sA/viewform?usp=sf_link"
-              )
-            }
-          >
-            Submit Form
-          </Button>
-        </div>
         {error && (
           <Alert variant="danger" className="mb-4">
             {error}
@@ -212,6 +188,30 @@ function App() {
               )}
             </tbody>
           </Table>
+        </div>
+        <p className="text-center col-lg-8">
+          Ghostings.fyi is a collection of ghosting experiences by job
+          candidates that aims to bring more transparency to the recruitment
+          process. You may anonymously submit experiences to be reviewed by the
+          team at the link below and can browse previously reported experiences
+          using the search function below. We ask that this list be used solely
+          for research purposes while evaluting potential employers and not in
+          any malicious manner. Experiences matter and we hope that our efforts
+          improve the overall recruitment process for both candidates and
+          companies in the future.
+        </p>
+        <div className="justify-content-center align-items-center">
+          <Button
+            style={{ marginBottom: "20px" }}
+            variant="primary"
+            onClick={() =>
+              openInNewTab(
+                "https://docs.google.com/forms/u/1/d/e/1FAIpQLSfnvMHVuxRXez5_ih43I9p-p8iXv9PZRXuXJZsYF6O76Td4sA/viewform?usp=sf_link"
+              )
+            }
+          >
+            Experience Submission Form
+          </Button>
         </div>
       </Container>
     </div>
