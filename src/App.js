@@ -203,7 +203,7 @@ function App() {
         <div className="justify-content-center align-items-center">
           <Button
             style={{ marginBottom: "20px" }}
-            variant="primary"
+            variant="secondary"
             onClick={() =>
               openInNewTab(
                 "https://docs.google.com/forms/u/1/d/e/1FAIpQLSfnvMHVuxRXez5_ih43I9p-p8iXv9PZRXuXJZsYF6O76Td4sA/viewform?usp=sf_link"
