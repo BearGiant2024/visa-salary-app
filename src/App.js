@@ -43,14 +43,14 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!recruiterInitials && !company) {
-      setError("Please provide Either Recruiter's Initials and Company name");
+    // Check if both fields are empty
+    if (!recruiterInitials.trim() && !company.trim()) {
+      setError("Please provide either Recruiter's Initials or Company name");
       setShowResults(false);
       return;
-    } else {
     }
 
-    setError("");
+    setError(""); // Clear previous errors
 
     try {
       const fetchedData = await fetchSheetData(
@@ -91,122 +91,6 @@ function App() {
     window.open(url, "_blank", "noreferrer");
   };
 
-  // return (
-  //   <div className="app-container">
-  //     <Container className="mt-5 d-flex flex-column justify-content-center align-items-center">
-  //       <h1 className="text-center" style={{ minHeight: "10vh" }}>
-  //         <b>Ghosting's Database</b>
-  //       </h1>
-  //       {error && (
-  //         <Alert variant="danger" className="mb-4">
-  //           {error}
-  //         </Alert>
-  //       )}
-  //       <Form className="mb-4">
-  //         <div className="row">
-  //           <div className="col-md-4 mb-3">
-  //             <Form.Control
-  //               type="text"
-  //               value={recruiterInitials}
-  //               onChange={(e) => setRecruiterInitials(e.target.value)}
-  //               placeholder="Recruiter's Initials"
-  //               required
-  //             />
-  //           </div>
-  //           <div className="col-md-4 mb-3">
-  //             <Form.Control
-  //               type="text"
-  //               value={company}
-  //               onChange={(e) => setCompany(e.target.value)}
-  //               placeholder="Company"
-  //               required
-  //             />
-  //           </div>
-  //           <div className="col-md-3 mb-3">
-  //             <Form.Control
-  //               as="select"
-  //               value={year}
-  //               onChange={(e) => setYear(e.target.value)}
-  //             >
-  //               <option>All Years</option>
-  //               {years.map((year) => (
-  //                 <option key={year} value={year}>
-  //                   {year}
-  //                 </option>
-  //               ))}
-  //             </Form.Control>
-  //           </div>
-  //           <div className="col-md-1 mb-3 d-flex align-items-end">
-  //             <Button variant="primary" onClick={handleSubmit} block>
-  //               Search
-  //             </Button>
-  //           </div>
-  //         </div>
-  //       </Form>
-  //       <div
-  //         className="table-responsive mt-4"
-  //         style={{ maxWidth: "800px", margin: "0 auto" }}
-  //       >
-  //         <Table striped bordered hover>
-  //           {showResults && ghostingRecords.length > 0 ? (
-  //             <thead>
-  //               <tr>
-  //                 <th>Company</th>
-  //                 <th>Recruiter's Initials</th>
-  //                 <th>Stage</th>
-  //                 <th>Follow Up</th>
-  //                 <th>Year</th>
-  //               </tr>
-  //             </thead>
-  //           ) : null}
-  //           <tbody>
-  //             {showResults && ghostingRecords.length > 0 ? (
-  //               ghostingRecords.map((record, index) => {
-  //                 return (
-  //                   <tr key={index}>
-  //                     <td>{record.company}</td>
-  //                     <td>{record.recruiterInitials}</td>
-  //                     <td>{record.stage}</td>
-  //                     <td>{record.followUp}</td>
-  //                     <td>{record.year}</td>
-  //                   </tr>
-  //                 );
-  //               })
-  //             ) : (
-  //               <tr>
-  //                 <td colSpan="5">No records found.</td>
-  //               </tr>
-  //             )}
-  //           </tbody>
-  //         </Table>
-  //       </div>
-  //       <p className="text-center col-lg-8">
-  //         Ghostings.fyi is a collection of ghosting experiences by job
-  //         candidates that aims to bring more transparency to the recruitment
-  //         process. You may anonymously submit experiences to be reviewed by the
-  //         team at the link below and can browse previously reported experiences
-  //         using the search function below. We ask that this list be used solely
-  //         for research purposes while evaluting potential employers and not in
-  //         any malicious manner. Experiences matter and we hope that our efforts
-  //         improve the overall recruitment process for both candidates and
-  //         companies in the future.
-  //       </p>
-  //       <div className="text-center mt-3">
-  //         <Button
-  //           variant="secondary"
-  //           onClick={() =>
-  //             openInNewTab(
-  //               ""
-  //             )
-  //           }
-  //         >
-  //           Experience Submission Form
-  //         </Button>
-  //       </div>
-  //     </Container>
-  //   </div>
-  // );
-
   return (
     <div className="app-container">
       <Container className="mt-5 d-flex flex-column justify-content-center align-items-center">
@@ -226,7 +110,6 @@ function App() {
                 value={recruiterInitials}
                 onChange={(e) => setRecruiterInitials(e.target.value)}
                 placeholder="Recruiter's Initials"
-                required
               />
             </div>
             <div className="col-lg-3 col-md-6 mb-3">
@@ -235,7 +118,6 @@ function App() {
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
                 placeholder="Company"
-                required
               />
             </div>
             <div className="col-lg-3 col-md-6 mb-3">
@@ -309,9 +191,9 @@ function App() {
           improve the overall recruitment process for both candidates and
           companies in the future.
         </p>
-        <div className="text-center">
+        <div className="row">
           <Button
-            style={{ marginBottom: "20px" }}
+            style={{ width: "100%" }}
             variant="secondary"
             onClick={() =>
               openInNewTab(
@@ -322,6 +204,8 @@ function App() {
             Experience Submission Form
           </Button>
         </div>
+
+        <div className="row"></div>
       </Container>
     </div>
   );
