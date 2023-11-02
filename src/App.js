@@ -181,15 +181,19 @@ function App() {
           </div>
         )}
         <p className="text-center col-lg-8 mx-auto my-5">
-          Ghostings.fyi is a collection of ghosting experiences by job
-          candidates that aims to bring more transparency to the recruitment
-          process. You may anonymously submit experiences to be reviewed by the
-          team at the link below and can browse previously reported experiences
-          using the search function below. We ask that this list be used solely
-          for research purposes while evaluting potential employers and not in
-          any malicious manner. Experiences matter and we hope that our efforts
-          improve the overall recruitment process for both candidates and
-          companies in the future.
+          Ghostings.fyi is a database collection of unpleasant experiences by job
+          candidates who stopped receiving responses from recruiters during their
+          interview process. The database aims to bring more transparency to the 
+          recruitment process and give candidates a forum to archive these interactions
+          as experiences matter. You can browse previously reported experiences
+          using the search function above. You may also anonymously submit your own 
+          personal experiences to be reviewed by the team at the link below. Please note 
+          that Google Sheets requires you to log in to verify that you are a real person, 
+          but we DO NOT collect any information other than your responses. We ask that 
+          this list be used solely to catalog real experiences or for research purposes 
+          while evaluating potential employers and not in any other malicious manner. 
+          Again, experiences matter and  we hope that our efforts improve the overall 
+          recruitment process for both candidates and companies in the future.
         </p>
         <div className="row">
           <Button
