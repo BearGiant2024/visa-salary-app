@@ -181,9 +181,9 @@ function App() {
           </div>
         )}
         <p className="text-center col-lg-8 mx-auto my-5">
-          Ghostings.fyi is a database of unpleasant experiences by job
+          <p>Ghostings.fyi is a database of unpleasant experiences by job
           candidates who stopped receiving responses from recruiters during their
-          interview process. 
+          interview process.</p>
             
           The database aims to bring more transparency to the 
           recruitment process and give candidates a forum to archive these interactions.
