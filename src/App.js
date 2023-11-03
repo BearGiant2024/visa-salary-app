@@ -182,7 +182,8 @@ function App() {
         )}
         <p className="text-center col-lg-8 mx-auto my-5">
           <p>Ghostings.fyi is a database of unpleasant experiences by job
-          candidates who stopped receiving responses from recruiters during their
+          candidates who stopped
+          receiving responses from recruiters during their
           interview process.</p>
             
           The database aims to bring more transparency to the 
