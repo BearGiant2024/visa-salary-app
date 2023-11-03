@@ -181,11 +181,14 @@ function App() {
           </div>
         )}
         <p className="text-center col-lg-8 mx-auto my-5">
-          Ghostings.fyi is a database collection of unpleasant experiences by job
+          Ghostings.fyi is a database of unpleasant experiences by job
           candidates who stopped receiving responses from recruiters during their
-          interview process. The database aims to bring more transparency to the 
-          recruitment process and give candidates a forum to archive these interactions
-          as experiences matter. You can browse previously reported experiences
+          interview process. 
+            
+          The database aims to bring more transparency to the 
+          recruitment process and give candidates a forum to archive these interactions.
+          Experiences matter and recruiters are the public face of companies to potential
+          employees. You can browse the previously reported experiences that we've received
           using the search function above. You may also anonymously submit your own 
           personal experiences to be reviewed by the team at the link below. Please note 
           that Google Sheets requires you to log in to verify that you are a real person, 
